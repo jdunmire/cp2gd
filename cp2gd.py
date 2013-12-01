@@ -127,12 +127,7 @@ def main(argv):
     else:
         mime_type = flags.mime_type
 
-    print "mime type = %s" % mime_type
     try:
-        print "Success! Now add code here."
-
-        print flags.folder
-
         parent_id = None
         if flags.folder != '/':
             # find parent IDs, create if they don't exist
@@ -162,21 +157,19 @@ def main(argv):
         'title': dest,
         'description': flags.desc,
         'mimeType': mime_type,
-        #'parents': [{'id': parent_id}],
         }
+
         # Set the parent folder.
         if parent_id is not None:
             body['parents'] = [{'id': parent_id}]
 
-        print body
-        sys.exit(0)
         try:
             file = service.files().insert(
                 body=body,
                 media_body=media_body).execute()
 
             # Uncomment the following line to print the File ID
-            print 'File ID: %s' % file['id']
+            # print 'File ID: %s' % file['id']
 
         except apierrors.HttpError, error:
             print 'An error occured: %s' % error
