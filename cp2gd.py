@@ -141,7 +141,7 @@ def main(argv):
                 parent = service.files().list(**param).execute()
                 if len(parent['items']) > 0:
                     parent_id = parent['items'][0]['id']
-                    print 'parent id = %s' % parent_id
+                    #print 'parent id = %s' % parent_id
                 else:
                     print 'ERROR: folder "%s" not found.' % flags.folder
                     sys.exit(1)

@@ -18,7 +18,24 @@ To copy to an existing Google Drive folder use the `--folder` option.
 
 A full list of options is avaialbe from from the script itself:
 
-    python ./c2gd.py --help
+    python ./cp2gd.py --help
+
+### mime-types
+When a file is copied to Google Drive it is assigned a mime-type.
+`cp2gd.py` will attempt to guess a mime-type (and default to
+`appilication/octet-stream`) or you can specify the mime-type with the
+`--mime-type` argument. The _official_ list of mime-types can be found at
+[http://www.iana.org/assignments/media-types](IANA) and many systems
+have a local copy in `/etc/mime.types`. Google specific mime types are
+listed [https://developers.google.com/drive/mime-types](here).
+
+Here are a few of the mime-types I use frequently:
+  * text/plain
+  * text/html
+  * image/jpeg
+  * image/png
+  * video/mp4
+  * application/x-python-code
 
 
 ## Setup
@@ -29,9 +46,14 @@ Python library and to get two sets of permissions from Google.
 ### Install Google API library
 Installing the needed library is easy:
 
-    pip install google-api-python-client
+    sudo pip install google-api-python-client
 
+If you don't have pip installed then you need to start with these
+commands:
 
+    sudo apt-get install python-setuptools
+    sudo easy_install pip
+    
 ### Get application secrets
 These _secrets_ authorize the use use of Google APIs by an application.
 They are assocated with the _developer_ of the application and used by
