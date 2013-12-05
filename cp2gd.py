@@ -88,8 +88,15 @@ def getGoogleDriveService(cmdLineFlags):
 # Setup command line processing
 parser = argparse.ArgumentParser(
     description=__doc__,
-    formatter_class=argparse.RawDescriptionHelpFormatter,
+    formatter_class=argparse.RawTextHelpFormatter,
     parents=[oa2tools.argparser])
+parser.add_argument('--delete',
+                help='''Delete after a successful copy.
+CAUTION: This is relatively dangerous.
+DO NOT USE when copying files of value. You have been
+warned!''',
+                action="store_true")
+
 parser.add_argument('--file-description',
     dest='desc',
     help='Short description to be displayed by Google Drive',
@@ -98,8 +105,8 @@ parser.add_argument('--folder', default= '/')
 parser.add_argument('--mime-type',
     dest='mime_type',
     help='''If not specified then a mime-type will be
-    guessed using the source filename. Defaults to 
-    application/octet-stream if the guess fails''',
+guessed using the source filename. Defaults to 
+application/octet-stream if the guess fails''',
     default=None)
 parser.add_argument("source", nargs='?', default=None)
 parser.add_argument("dest", nargs='?',default=None)
@@ -115,7 +122,7 @@ def main(argv):
 
     source = flags.source
     if flags.dest is None:
-        dest = source
+        dest = os.path.basename(source)
     else:
         dest = flags.dest
 
@@ -149,9 +156,6 @@ def main(argv):
             except apierrors.HttpError, error:
                 print 'An error occured: %s' % error
 
-
-
-
         media_body = MediaFileUpload(flags.source, mimetype=mime_type, resumable=True)
         body = {
         'title': dest,
@@ -177,8 +181,12 @@ def main(argv):
     except oa2client.AccessTokenRefreshError:
         sys.stderr.write("ERRRO: The credentials have been revoked or " +
                 "expired please re-run the application to re-authorize.")
-        sys.exit(1);
+        sys.exit(1)
+
+    if flags.delete:
+        os.remove(source)
 
 
 if __name__ == '__main__':
     main(sys.argv)
+    sys.exit(0)
